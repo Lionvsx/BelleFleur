@@ -59,26 +59,5 @@ public class Commande
 
     
 
-    public void CheckStock()
-    {
-        var command = Database.Connexion.CreateCommand();
-        command.CommandText = $"SELECT quantité FROM stock WHERE " +
-                              $" id_produit = (SELECT cp.id_produit FROM commande_produit cp INNER JOIN commande c " +
-                              $"ON cp.id_commande = c.id_commande);";
-        var reader = command.ExecuteReader();
-        while (reader.Read())
-        {
-            var quantite = reader.GetInt32(0);
-            var command2 = Database.Connexion.CreateCommand();
-            command2.CommandText = $"SELECT p.seuil_alerte FROM produit p " +
-                                   $"INNER JOIN commande_produit cp ON p.id_produit=cp.id_produit" +
-                                   $" INNER JOIN commande c ON c.id_commande=cp.id_commande;";
-            var reader2 = command2.ExecuteReader();
-            var seuil_alerte = reader2.GetInt32(0);
-            if (quantite < seuil_alerte)
-            {
-                Console.WriteLine("Le stock est en dessous du seuil d'alerte");
-            }
-        }
-    }
+    
 }

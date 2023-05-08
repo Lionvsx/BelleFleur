@@ -77,10 +77,37 @@ public static class Database
         return result;
     }
 
-    public static List<Stocks> GetStocks()
+    public static List<Stocks> GetStocksParis()
     {
         var command = _connexion.CreateCommand();
-        command.CommandText = "SELECT * FROM stocks;";
+        command.CommandText = "SELECT * FROM stocks WHERE stocks.id_magasin = 1;";
+        var reader = command.ExecuteReader();
+        var result = new List<Stocks>();
+        while (reader.Read())
+        {
+            result.Add(new Stocks(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3)));
+        }
+        reader.Close();
+        return result;
+    }
+    public static List<Stocks> GetStocksLyon()
+    {
+        var command = _connexion.CreateCommand();
+        command.CommandText = "SELECT * FROM stocks WHERE stocks.id_magasin = 2;";
+        var reader = command.ExecuteReader();
+        var result = new List<Stocks>();
+        while (reader.Read())
+        {
+            result.Add(new Stocks(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3)));
+        }
+        reader.Close();
+        return result;
+    }
+    
+    public static List<Stocks> GetStocksNantes()
+    {
+        var command = _connexion.CreateCommand();
+        command.CommandText = "SELECT * FROM stocks WHERE stocks.id_magasin = 3;";
         var reader = command.ExecuteReader();
         var result = new List<Stocks>();
         while (reader.Read())
@@ -145,6 +172,103 @@ public static class Database
             reader.GetString(5), reader.GetString(6), reader.GetString(7), reader.GetString(8), reader.GetString(9), reader.GetBoolean(10)); 
         reader.Close();
         return result;
+    }
+
+    public static string GetNomProduit(int idproduit)
+    {
+        var command = _connexion.CreateCommand();
+        command.CommandText = $"SELECT nom_produit FROM produit WHERE id_produit = {idproduit};";
+        var reader = command.ExecuteReader();
+        reader.Read();
+        var result = reader.GetString(0);
+        reader.Close();
+        return result;
+    }
+    public static List<int> CheckStockParis()
+    {
+        var output = new List<int>();
+        var produitstock = new List<(int, int)>(); // (idproduit, quantite)
+        var command = Database.Connexion.CreateCommand();
+        command.CommandText = $"SELECT id_produit,quantite FROM stocks WHERE id_magasin = 1;";
+        var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            produitstock.Add((reader.GetInt32(0), reader.GetInt32(1)));
+        }
+        reader.Close();
+        
+        var command2 = Database.Connexion.CreateCommand();
+        foreach (var (idproduit, quantite) in produitstock)
+        {
+            command2.CommandText = $"SELECT seuil_alerte FROM produit WHERE id_produit = {idproduit};";
+            var reader2 = command2.ExecuteReader();
+            reader2.Read();
+            var seuil_alerte = reader2.GetInt32(0);
+            if (quantite < seuil_alerte)
+            {
+                output.Add(idproduit);
+            }
+            reader2.Close();
+        }
+        return output;
+    }
+
+    public static List<int> CheckStockLyon()
+    {
+        var output = new List<int>();
+        var produitstock = new List<(int, int)>(); // (idproduit, quantite)
+        var command = Database.Connexion.CreateCommand();
+        command.CommandText = $"SELECT id_produit,quantite FROM stocks WHERE id_magasin = 2;";
+        var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            produitstock.Add((reader.GetInt32(0), reader.GetInt32(1)));
+        }
+        reader.Close();
+        
+        var command2 = Database.Connexion.CreateCommand();
+        foreach (var (idproduit, quantite) in produitstock)
+        {
+            command2.CommandText = $"SELECT seuil_alerte FROM produit WHERE id_produit = {idproduit};";
+            var reader2 = command2.ExecuteReader();
+            reader2.Read();
+            var seuil_alerte = reader2.GetInt32(0);
+            if (quantite < seuil_alerte)
+            {
+                output.Add(idproduit);
+            }
+            reader2.Close();
+        }
+        return output;
+    }
+    
+    public static List<int> CheckStockNantes()
+    {
+        var output = new List<int>();
+        var produitstock = new List<(int, int)>(); // (idproduit, quantite)
+        var command = Database.Connexion.CreateCommand();
+        command.CommandText = $"SELECT id_produit,quantite FROM stocks WHERE id_magasin = 3;";
+        var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            produitstock.Add((reader.GetInt32(0), reader.GetInt32(1)));
+        }
+        reader.Close();
+        
+        var command2 = Database.Connexion.CreateCommand();
+        foreach (var (idproduit, quantite) in produitstock)
+        {
+            command2.CommandText = $"SELECT seuil_alerte FROM produit WHERE id_produit = {idproduit};";
+            var reader2 = command2.ExecuteReader();
+            reader2.Read();
+            var seuil_alerte = reader2.GetInt32(0);
+            if (quantite < seuil_alerte)
+            {
+                output.Add(idproduit);
+            }
+            reader2.Close();
+        }
+        return output;
     }
 
     public static void ClearTables()

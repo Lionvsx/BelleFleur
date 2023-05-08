@@ -29,19 +29,19 @@ public class Stocks
         command.ExecuteNonQuery();
     }
     
-    public void CheckStocksQuantite(int quantite)
+    
+    public int GetIdStocks()
     {
-        var command = Database.Connexion.CreateCommand();
-        command.CommandText = $"SELECT p.seuil_alerte FROM produit p INNER JOIN stocks s ON p.id_produit ==s.id_produit;";
-        var reader = command.ExecuteReader();
-        while (reader.Read())
-        {
-            var seuil_alerte = reader.GetInt32(0);
-            if (quantite < seuil_alerte)
-            {
-                Console.WriteLine("Le stock est en dessous du seuil d'alerte");
-            }
-        }
-        
+        return id_stocks;
+    }
+    
+    public int GetQuantite()
+    {
+        return quantite;
+    }
+    
+    public int GetIdProduit()
+    {
+        return id_produit;
     }
 }
