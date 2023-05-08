@@ -1,3 +1,4 @@
+USE belle_fleur;
 INSERT INTO user (username, nom_utilisateur, prenom_utilisateur, telephone_utilisateur, email_utilisateur, password, adresse_utilisateur, carte_credit_utilisateur, statut_fidelite ,is_admin)
 VALUES ('MrBellefleur','Bellefleur', 'Michel', '0658003235', 'michel.bellefleur@mail.com', 'password', '2 chemin du chemin', '1234534567678912', 'null', 1),
        ('LucieD','Dufour', 'Lucie', '0612345678', 'lucie.dufour@mail.com', 'password123', '12 rue des Fleurs', '1234567890123456', 'OR', 0),
