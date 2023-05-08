@@ -65,6 +65,12 @@ public class Login : Menu
             Console.ReadKey();
             Invoke();
         }
-        UserPage userPage = new UserPage(user, admin);
+        if (admin)
+        {
+            AdminPage adminPage = new AdminPage(user);
+            adminPage.Invoke();
+        }
+        UserPage userPage = new UserPage(user);
+        userPage.Invoke();
     }
 }
