@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS stocks (
 
 CREATE TABLE IF NOT EXISTS commande_produit (
     id_commande_produit int(11) NOT NULL AUTO_INCREMENT,
+    quantite int(11) NOT NULL,
     id_commande int(11) NOT NULL,
     id_produit int(11) NOT NULL,
     PRIMARY KEY (id_commande_produit),
