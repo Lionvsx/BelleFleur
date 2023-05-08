@@ -77,6 +77,19 @@ public static class Database
         return result;
     }
 
+    public static List<Stocks> GetStocks()
+    {
+        var command = _connexion.CreateCommand();
+        command.CommandText = "SELECT * FROM stocks;";
+        var reader = command.ExecuteReader();
+        var result = new List<Stocks>();
+        while (reader.Read())
+        {
+            result.Add(new Stocks(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3)));
+        }
+        reader.Close();
+        return result;
+    }
     public static List<Produit> GetProducts()
     {
         var command = _connexion.CreateCommand();

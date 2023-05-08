@@ -36,7 +36,9 @@ public class AdminPage : Menu
     
     public void CheckStocks()
     {
-        
+        var stocksPage = new Admin.AllStocks(_activeUser);
+        stocksPage.Invoke();
+        Invoke();
     }
     
     public void CheckOrders()

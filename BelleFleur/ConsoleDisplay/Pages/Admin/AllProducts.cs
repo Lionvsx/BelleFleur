@@ -8,7 +8,7 @@ public class AllProducts : Menu
     private List<Produit> _products;
     
     public AllProducts(Database.Structures.User user)
-    {
+    { 
         _activeUser = user;
         _products = new List<Produit>();
         _products = Database.Database.GetProducts();
