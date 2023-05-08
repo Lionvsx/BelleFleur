@@ -102,8 +102,8 @@ public class Menu
 
     public class Option
     {
-        public string Name { get; }
-        public Action Function { get; }
+        public string Name { get; set;}
+        public Action Function { get; set; }
 
         public Option(string name, Action function)
         {

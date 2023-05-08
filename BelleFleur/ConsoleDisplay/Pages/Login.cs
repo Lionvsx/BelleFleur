@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace BelleFleur.ConsoleDisplay.Pages;
 
 public class Login : Menu
@@ -9,7 +11,7 @@ public class Login : Menu
             new("Utilisateur", UserAccess),
             new("Administrateur", AdminAccess),
             new("Créer un compte", CreateAccount),
-            new("Quitter", ExitMenu)
+            new("Quitter", () => Environment.Exit(0))
         };
         Description = "Veuillez selectionner un type d'utilisateur";
     }
@@ -26,7 +28,18 @@ public class Login : Menu
         // Type password 2 times
         Console.WriteLine("Veuillez confirmer le mot de passe: ");
         var password2 = ConsoleFunctions.ReadPassword();
-        
+        // Ask for prénom, nom, adresse, telephone, carte crédit
+        Console.Write("Prénom: ");
+        var firstName = Console.ReadLine();
+        Console.Write("Nom: ");
+        var lastName = Console.ReadLine();
+        Console.Write("Adresse: ");
+        var address = Console.ReadLine();
+        Console.Write("Téléphone: ");
+        var phone = Console.ReadLine();
+        Console.Write("Carte de crédit: ");
+        var creditCard = Console.ReadLine();
+
         if (password != password2)
         {
             Console.WriteLine("Les mots de passe ne correspondent pas, veuillez réessayer.");
@@ -35,7 +48,7 @@ public class Login : Menu
         }
         
         Console.WriteLine("Création du compte en cours...");
-        var result = Database.Database.CreateAccount(user, password);
+        var result = Database.Database.CreateAccount(user, password, firstName, lastName, address, phone, creditCard, email);
     }
 
     private void UserAccess()
@@ -58,7 +71,7 @@ public class Login : Menu
         Console.WriteLine("Connexion en cours...");
         // Check if null
         if (user == null || password == null) return;
-        var result= Database.Database.Authentificate(user, password, true);
+        var result= Database.Database.Authentificate(user, password, admin);
         if (result == false)
         {
             Console.WriteLine("Utilisateur ou mot de passe incorrect, veuillez réessayer.");
@@ -72,5 +85,6 @@ public class Login : Menu
         }
         UserPage userPage = new UserPage(user);
         userPage.Invoke();
+        Invoke();
     }
 }

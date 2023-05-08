@@ -100,9 +100,11 @@ public class User
         set => is_admin = value;
     }
 
-    public void UpdatePassword()
+    public void UpdatePassword(string password)
     {
-        
+        var command = Database.Connexion.CreateCommand();
+        command.CommandText = $"UPDATE user SET password = '{password}' WHERE id = {_id};";
+        command.ExecuteNonQuery();
     }
 
     public void Save()
@@ -117,5 +119,19 @@ public class User
         var command = Database.Connexion.CreateCommand();
         command.CommandText = $"DELETE FROM user WHERE id = {_id};";
         command.ExecuteNonQuery();
+    }
+    
+    public int[] GetCommandes()
+    {
+        var command = Database.Connexion.CreateCommand();
+        command.CommandText = $"SELECT id_commande FROM commande WHERE id_utilisateur = {_id};";
+        var reader = command.ExecuteReader();
+        var commandes = new List<int>();
+        while (reader.Read())
+        {
+            commandes.Add(reader.GetInt32(0));
+        }
+        reader.Close();
+        return commandes.ToArray();
     }
 }
