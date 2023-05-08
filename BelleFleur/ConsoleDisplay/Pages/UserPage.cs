@@ -10,9 +10,9 @@ public class UserPage : Menu
         _activeUser = new Database.Structures.User(username);
         Options = new List<Option>()
         {
-            new("Magasin", () => Shop(_activeUser)),
+            new("Magasin", Shop),
             new("Modifier le profil", EditProfile),
-            new("Commandes", () => Orders(_activeUser)),
+            new("Commandes", Orders),
             new("Changer le mot de passe", ChangePassword),
             new("Me déconnecter", ExitMenu)
         };
@@ -21,9 +21,9 @@ public class UserPage : Menu
         Description = "Bienvenue " + _activeUser.Username + " !";
     }
 
-    public void Shop(Database.Structures.User user)
+    public void Shop()
     {
-        var shoppingPage = new ShoppingPage(user);
+        var shoppingPage = new ShoppingPage(_activeUser);
         shoppingPage.Invoke();
         Invoke();
 
@@ -36,9 +36,9 @@ public class UserPage : Menu
         Invoke();
     }
 
-    public void Orders(Database.Structures.User user)
+    public void Orders()
     {
-        var ordersPage = new OrdersPage(user);
+        var ordersPage = new OrdersPage(_activeUser);
         ordersPage.Invoke();
         Invoke();
     }

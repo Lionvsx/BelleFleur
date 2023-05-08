@@ -2,7 +2,7 @@ namespace BelleFleur.Database.Structures;
 
 public class User
 {
-    private int _id;
+    public readonly int _id;
     private string username;
     private string nom;
     private string prenom;
