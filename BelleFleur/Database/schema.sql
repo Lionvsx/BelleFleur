@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS user (
     email_utilisateur varchar(250) NOT NULL,
     adresse_utilisateur varchar(250) NOT NULL,
     carte_credit_utilisateur varchar(250) NOT NULL,
-    statut_fidelite varchar(250),
+    statut_fidelite varchar(250) NOT NULL,
     is_admin boolean NOT NULL,
     PRIMARY KEY (_id)
     ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
