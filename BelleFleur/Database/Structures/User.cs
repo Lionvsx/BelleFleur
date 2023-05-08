@@ -118,4 +118,18 @@ public class User
         command.CommandText = $"DELETE FROM user WHERE id = {_id};";
         command.ExecuteNonQuery();
     }
+    
+    public int[] GetCommandes()
+    {
+        var command = Database.Connexion.CreateCommand();
+        command.CommandText = $"SELECT id_commande FROM commande WHERE id_utilisateur = {_id};";
+        var reader = command.ExecuteReader();
+        var commandes = new List<int>();
+        while (reader.Read())
+        {
+            commandes.Add(reader.GetInt32(0));
+        }
+        reader.Close();
+        return commandes.ToArray();
+    }
 }
