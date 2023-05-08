@@ -1,14 +1,14 @@
-INSERT INTO user (nom_utilisateur, prenom_utilisateur, telephone_utilisateur, email_utilisateur, password, adresse_utilisateur, carte_credit_utilisateur, statut_fidelite ,is_admin)
-VALUES ('Bellefleur', 'Michel', '0658003235', 'michel.bellefleur@mail.com', 'password', '2 chemin du chemin', '1234534567678912', NULL, 1),
-       ('Dufour', 'Lucie', '0612345678', 'lucie.dufour@mail.com', 'password123', '12 rue des Fleurs', '1234567890123456', 'OR', 0),
-       ('Martin', 'Jules', '0698765432', 'jules.martin@mail.com', 'password456', '8 avenue des Roses', '2345678901234567', 'Bronze', 0),
-       ('Petit', 'Sophie', '0734567890', 'sophie.petit@mail.com', 'password789', '6 boulevard des Orchidées', '3456789012345678', NULL, 0),
-       ('Legrand', 'Paul', '0778901234', 'paul.legrand@mail.com', 'password321', '14 impasse des Marguerites', '4567890123456789', 'OR', 0),
-       ('Garnier', 'Emma', '0712348901', 'emma.garnier@mail.com', 'password654', '22 rue des Tulipes', '5678901234567890', 'Bronze', 0),
-       ('Laroche', 'Hugo', '0765432189', 'hugo.laroche@mail.com', 'password987', '28 place des Pivoines', '6789012345678901', NULL, 0),
-       ('Moreau', 'Louis', '0723456789', 'louis.moreau@mail.com', 'password222', '44 avenue des Iris', '9012345678901234', 'Bronze', 0),
-       ('Dupont', 'Eva', '0767890123', 'eva.dupont@mail.com', 'password333', '52 boulevard des Jonquilles', '0123456789012345', NULL, 0),
-       ('Lefevre', 'Adam', '0789012345', 'adam.lefevre@mail.com', 'password444', '60 impasse des Coquelicots', '1234567890123451', 'OR', 0);
+INSERT INTO user (username, nom_utilisateur, prenom_utilisateur, telephone_utilisateur, email_utilisateur, password, adresse_utilisateur, carte_credit_utilisateur, statut_fidelite ,is_admin)
+VALUES ('MrBellefleur','Bellefleur', 'Michel', '0658003235', 'michel.bellefleur@mail.com', 'password', '2 chemin du chemin', '1234534567678912', NULL, 1),
+       ('LucieD','Dufour', 'Lucie', '0612345678', 'lucie.dufour@mail.com', 'password123', '12 rue des Fleurs', '1234567890123456', 'OR', 0),
+       ('JulesM','Martin', 'Jules', '0698765432', 'jules.martin@mail.com', 'password456', '8 avenue des Roses', '2345678901234567', 'Bronze', 0),
+       ('SophieP','Petit', 'Sophie', '0734567890', 'sophie.petit@mail.com', 'password789', '6 boulevard des Orchidées', '3456789012345678', NULL, 0),
+       ('PaulL','Legrand', 'Paul', '0778901234', 'paul.legrand@mail.com', 'password321', '14 impasse des Marguerites', '4567890123456789', 'OR', 0),
+       ('EmmaG','Garnier', 'Emma', '0712348901', 'emma.garnier@mail.com', 'password654', '22 rue des Tulipes', '5678901234567890', 'Bronze', 0),
+       ('HugoL','Laroche', 'Hugo', '0765432189', 'hugo.laroche@mail.com', 'password987', '28 place des Pivoines', '6789012345678901', NULL, 0),
+       ('LouisM','Moreau', 'Louis', '0723456789', 'louis.moreau@mail.com', 'password222', '44 avenue des Iris', '9012345678901234', 'Bronze', 0),
+       ('EvaD','Dupont', 'Eva', '0767890123', 'eva.dupont@mail.com', 'password333', '52 boulevard des Jonquilles', '0123456789012345', NULL, 0),
+       ('AdamL','Lefevre', 'Adam', '0789012345', 'adam.lefevre@mail.com', 'password444', '60 impasse des Coquelicots', '1234567890123451', 'OR', 0);
 
 INSERT INTO magasin (nom_magasin, adresse_magasin)
 VALUES ('Fleuriste Paris ', ' 2 bis avenue garnier'),
