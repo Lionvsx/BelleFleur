@@ -80,12 +80,13 @@ public static class Database
     public static List<Produit> GetProducts()
     {
         var command = _connexion.CreateCommand();
-        command.CommandText = "SELECT * FROM produit;";
+        // Get all products where debut_disponibilite <= today and fin_disponibilite >= today or fin_disponibilite is null and debut_disponibilite is null
+        command.CommandText = "SELECT * FROM produit WHERE (debut_disponibilite <= CURDATE() AND fin_disponibilite >= CURDATE()) OR (debut_disponibilite IS NULL AND fin_disponibilite IS NULL);";
         var reader = command.ExecuteReader();
         var result = new List<Produit>();
         while (reader.Read())
         {
-            result.Add(new Produit(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetInt32(4), reader.GetDateTime(5), reader.GetDateTime(6)));
+            result.Add(new Produit(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetFloat(3), reader.GetInt32(4)));
         }
         reader.Close();
         return result;
@@ -119,5 +120,12 @@ public static class Database
     public static void DropTables()
     {
         
+    }
+
+    public static MySqlDataReader GetData(string request)
+    {
+        var command = _connexion.CreateCommand();
+        command.CommandText = request;
+        return command.ExecuteReader();
     }
 }

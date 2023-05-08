@@ -58,7 +58,7 @@ public class Login : Menu
         Console.WriteLine("Connexion en cours...");
         // Check if null
         if (user == null || password == null) return;
-        var result= Database.Database.Authentificate(user, password, true);
+        var result= Database.Database.Authentificate(user, password, admin);
         if (result == false)
         {
             Console.WriteLine("Utilisateur ou mot de passe incorrect, veuillez réessayer.");

@@ -1,3 +1,5 @@
+using BelleFleur.ConsoleDisplay.Pages.User;
+
 namespace BelleFleur.ConsoleDisplay.Pages;
 
 public class UserPage : Menu
@@ -7,7 +9,7 @@ public class UserPage : Menu
         var user = new Database.Structures.User(username);
         Options = new List<Option>()
         {
-            new("Magasin", Shop),
+            new("Magasin", () => Shop(user)),
             new("Modifier le profil", EditProfile),
             new("Commandes", Orders),
             new("Déconnexion", Logout),
@@ -19,9 +21,11 @@ public class UserPage : Menu
         Description = "Bienvenue " + user.Username + " !";
     }
 
-    public void Shop()
+    public void Shop(Database.Structures.User user)
     {
-        
+        var shoppingPage = new ShoppingPage(user);
+        shoppingPage.Invoke();
+
     }
 
     public void EditProfile()
