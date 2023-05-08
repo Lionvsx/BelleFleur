@@ -457,6 +457,33 @@ public static class Database
         return result;
     }
 
+    /// <summary>
+    /// Donne le nom du bouquet ayant été le plus vendu avec le nombre de ventes et le revenu total
+    /// </summary>
+    /// <returns>
+    /// Un tuple avec (nom_bouquet, quantite vendu, revenu_total)
+    /// </returns>
+    public static (string, int, double) BestBouquet()
+    {
+        var command = _connexion.CreateCommand();
+        command.CommandText = "SELECT produit.nom_produit, COUNT(produit.nom_produit), SUM(produit.prix_produit) " +
+                              "FROM commande " +
+                              "JOIN commande_produit ON commande.id_commande = commande_produit.id_commande " +
+                              "JOIN produit ON commande_produit.id_produit = produit.id_produit " +
+                              "GROUP BY produit.nom_produit " +
+                              "ORDER BY COUNT(produit.nom_produit) DESC " +
+                              "LIMIT 1;";
+        var reader = command.ExecuteReader();
+        (string, int, double) result = ("", 0, 0.0);
+        while (reader.Read())
+        {
+            result = (reader.GetString(0), reader.GetInt32(1), reader.GetDouble(2));
+            //Console.WriteLine("meilleur bouquet : " + reader.GetString(0) + " avec " + reader.GetInt32(1) + " ventes pour un total de " + reader.GetDouble(2));
+        }
+        reader.Close();
+        return result;
+    }
+
     public static void DropTables()
     {
         
