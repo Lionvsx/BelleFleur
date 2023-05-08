@@ -1,5 +1,3 @@
-using System.Collections;
-
 namespace BelleFleur.Database.Structures;
 
 public class Commande
