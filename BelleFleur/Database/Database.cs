@@ -1,5 +1,6 @@
 using System.Data;
 using System.Text.Json;
+using System.Xml.Linq;
 using BelleFleur.Database.Structures;
 using MySql.Data.MySqlClient;
 
@@ -36,15 +37,22 @@ public static class Database
         command.CommandText = File.ReadAllText("../../../Database/schema.sql");
         command.ExecuteNonQuery();
     }
+
+    //Export products to JSON
+    public static void ExportJsonProducts()
+    {
+        var products = GetProducts();
+        var json = JsonSerializer.Serialize(products);
+        File.WriteAllText("../../../Database/products.json", json);
+    }
     
-    
-    //Export database to json
-    // public static void ExportToJson()
-    // {
-    //     var flowers = GetFlowers();
-    //     var json = JsonSerializer.Serialize(flowers);
-    //     File.WriteAllText("flowers.json", json);
-    // }
+    //Export products to XML
+    public static void ExportXmlProducts()
+    {
+        var products = GetProducts();
+        var xml = new XElement("products", products.Select(product => new XElement("product", new XAttribute("id", product.Id), new XAttribute("nom", product.Nom), new XAttribute("prix", product.Prix))));
+        xml.Save("../../../Database/products.xml");
+    }
 
     public static bool Authentificate(string user, string password, bool admin = false)
     {
