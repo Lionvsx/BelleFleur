@@ -151,22 +151,24 @@ public static class Database
     /// Le prix moyen des commandes effectué par magasin
     /// </summary>
     /// <returns>
-    /// tuple (nom_magasin, moyenne_prix_commandes)
+    /// Une liste de tuple contenant le nom du magasin et le prix moyen des commandes de ce magasin
+    /// (magasin 1, moyenne prix 1), (magasin 2, moyenne prix 2), ...
     /// </returns>
-    public static (string,double) MeanPriceCommand()
+    public static List<(string,double)> MeanPriceCommand()
     {
         var command = _connexion.CreateCommand();
-        command.CommandText = "SELECT magasin.id_magasin, magasin.nom_magasin, AVG(produit.prix_produit*quantite.commande_produit) as " +
+        command.CommandText = "SELECT magasin.id_magasin, magasin.nom_magasin, AVG(produit.prix_produit*commande_produit.quantite) as " +
                               "moyenne_prix_commandes FROM magasin " +
                               "INNER JOIN commande ON magasin.id_magasin = commande.id_magasin " +
                               "INNER JOIN commande_produit ON commande.id_commande = commande_produit.id_commande " +
                               "INNER JOIN produit ON commande_produit.id_produit = produit.id_produit " +
                               "GROUP BY magasin.id_magasin";
         var reader = command.ExecuteReader();
-        (string, double) result = ("", 0.0);
+        List<(string, double)> result = new List<(string, double)>();
         while (reader.Read())
         {
-            result = (reader.GetString(1), reader.GetDouble(2));
+            result.Add((reader.GetString(1), reader.GetDouble(2)));
+            //Console.WriteLine(reader.GetString(1) + " " + reader.GetDouble(2));
         }
         reader.Close();
         return result;
