@@ -8,8 +8,7 @@ public class Login : Menu
     {
         Options = new List<Option>()
         {
-            new("Utilisateur", UserAccess),
-            new("Administrateur", AdminAccess),
+            new("Me connecter", UserAccess),
             new("Créer un compte", CreateAccount),
             new("Quitter", () => Environment.Exit(0))
         };
@@ -54,10 +53,6 @@ public class Login : Menu
     private void UserAccess()
     {
         AuthUser();
-    }
-    private void AdminAccess()
-    {
-        AuthUser(true);
     }
 
     public void AuthUser(bool admin = false)

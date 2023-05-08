@@ -234,4 +234,11 @@ public static class Database
         command.CommandText = request;
         return command.ExecuteReader();
     }
+
+    public static void AddProduct(string name, double price, string type, int threshold)
+    {
+        var command = _connexion.CreateCommand();
+        command.CommandText = $"INSERT INTO produit (nom_produit, prix_produit, type_produit, seuil) VALUES ('{name}', {price}, '{type}', {threshold});";
+        command.ExecuteNonQuery();
+    }
 }
