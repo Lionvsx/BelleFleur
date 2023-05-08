@@ -52,6 +52,20 @@ public class Commande
         set => id_magasin = value;
     }
 
+    public string Username
+    {
+        get
+        {
+            var command = Database.Connexion.CreateCommand();
+            command.CommandText = $"SELECT username FROM user WHERE _id = {id_utilisateur};";
+            var reader = command.ExecuteReader();
+            reader.Read();
+            var username = reader.GetString(0);
+            reader.Close();
+            return username;
+        }
+    }
+
     public List<Produit> Produits
     {
         get

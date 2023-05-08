@@ -172,7 +172,14 @@ public static class Database
         var result = new List<Commande>();
         while (reader.Read())
         {
-            result.Add(new Commande(reader.GetInt32(0), reader.GetDateTime(1), reader.GetDateTime(2), reader.GetString(3), reader.GetString(4), reader.GetInt16(5), reader.GetInt16(6)));
+            if (reader.IsDBNull(3))
+            {
+                result.Add(new Commande(reader.GetInt32(0), reader.GetDateTime(1), reader.GetDateTime(2), reader.GetString(4), reader.GetInt16(5), reader.GetInt16(6)));
+            }
+            else
+            {
+                result.Add(new Commande(reader.GetInt32(0), reader.GetDateTime(1), reader.GetDateTime(2), reader.GetString(3), reader.GetString(4), reader.GetInt16(5), reader.GetInt16(6)));
+            }
         }
         reader.Close();
         return result;

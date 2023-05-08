@@ -1,5 +1,4 @@
 using BelleFleur.ConsoleDisplay.Pages.Admin;
-using BelleFleur.ConsoleDisplay.Pages.User;
 
 namespace BelleFleur.ConsoleDisplay.Pages;
 
@@ -36,26 +35,27 @@ public class AdminPage : Menu
     
     public void CheckStocks()
     {
-        var stocksPage = new Admin.AllStocks(_activeUser);
+        var stocksPage = new AllStocks(_activeUser);
         stocksPage.Invoke();
         Invoke();
     }
     
     public void CheckOrders()
     {
-        
+        var allOrdersPage = new AllOrders(_activeUser);
+        allOrdersPage.Invoke();
     }
     
     public void CheckUsers()
     {
-        var usersPage = new Admin.AllUsers(_activeUser);
+        var usersPage = new AllUsers(_activeUser);
         usersPage.Invoke();
         Invoke();
     }
     
     public void CheckProducts()
     {
-        var productsPage = new Admin.AllProducts(_activeUser);
+        var productsPage = new AllProducts(_activeUser);
         productsPage.Invoke();
         Invoke();
         
