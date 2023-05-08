@@ -10,12 +10,13 @@ public class Commande
     private int id_utilisateur;
     private int id_magasin;
 
-    public Commande(DateTime dateLivraison, string messageCommande, string etatCommande, int idMagasin)
+    public Commande(DateTime dateLivraison, string messageCommande, string etatCommande,int idUtilisateur, int idMagasin)
     {
         this.date_commande = DateTime.Now;
         this.date_livraison = dateLivraison;
         this.message_commande = messageCommande;
         this.etat_commande = etatCommande;
+        this.id_utilisateur = idUtilisateur;
         this.id_magasin = idMagasin;
         
     }
