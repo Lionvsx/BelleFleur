@@ -148,6 +148,13 @@ public static class Database
         reader.Close();
         return result;
     }
+    
+    public static void RemoveFromStock(int id, int quantite)
+    {
+        var command = _connexion.CreateCommand();
+        command.CommandText = $"UPDATE stocks SET quantite = quantite - {quantite} WHERE id_produit = {id};";
+        command.ExecuteNonQuery();
+    }
 
     public static List<Commande> GetOrders()
     {

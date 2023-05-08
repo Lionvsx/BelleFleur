@@ -53,6 +53,7 @@ public class ShoppingPage : Menu
         foreach (var product in _cart)
         {
             var orderProduct = new CommandeProduit(order.Id, product.Id, 1);
+            Database.Database.RemoveFromStock(product.Id, 1);
         }
         
         Console.WriteLine("Votre commande a bien été envoyée !");
