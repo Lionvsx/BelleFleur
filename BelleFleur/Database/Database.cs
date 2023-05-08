@@ -1,3 +1,4 @@
+using System.Data;
 using System.Text.Json;
 using BelleFleur.Database.Structures;
 using MySql.Data.MySqlClient;
@@ -130,6 +131,41 @@ public static class Database
         while (reader.Read())
         {
             result.Add(new Commande(reader.GetInt32(0), reader.GetDateTime(1), reader.GetDateTime(2), reader.GetString(3), reader.GetString(4), reader.GetInt16(5), reader.GetInt16(6)));
+        }
+        reader.Close();
+        return result;
+    }
+
+    public static List<Commande> GetUserOrders(User user)
+    {
+        var commmand = _connexion.CreateCommand();
+        commmand.CommandText = $"SELECT * FROM commande WHERE id_utilisateur = {user._id};";
+        var reader = commmand.ExecuteReader();
+        var result = new List<Commande>();
+        while (reader.Read())
+        {
+            if (reader.IsDBNull(3))
+            {
+                result.Add(new Commande(reader.GetInt32(0), reader.GetDateTime(1), reader.GetDateTime(2), reader.GetString(4), reader.GetInt16(5), reader.GetInt16(6)));
+            }
+            else
+            {
+                result.Add(new Commande(reader.GetInt32(0), reader.GetDateTime(1), reader.GetDateTime(2), reader.GetString(3), reader.GetString(4), reader.GetInt16(5), reader.GetInt16(6)));
+            }
+        }
+        reader.Close();
+        return result;
+    }
+
+    public static List<CommandeProduit> GetOrderProducts(Commande order)
+    {
+        var command = _connexion.CreateCommand();
+        command.CommandText = $"SELECT * FROM commande_produit WHERE id_commande = {order.Id};";
+        var reader = command.ExecuteReader();
+        var result = new List<CommandeProduit>();
+        while (reader.Read())
+        {
+            result.Add(new CommandeProduit(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2)));
         }
         reader.Close();
         return result;
