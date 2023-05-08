@@ -78,6 +78,19 @@ public static class Database
         return result;
     }
 
+    public static List<Stocks> GetStocks()
+    {
+        var command = _connexion.CreateCommand();
+        command.CommandText = "SELECT * FROM stocks;";
+        var reader = command.ExecuteReader();
+        var result = new List<Stocks>();
+        while (reader.Read())
+        {
+            result.Add(new Stocks(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3)));
+        }
+        reader.Close();
+        return result;
+    }
     public static List<Produit> GetProducts()
     {
         var command = _connexion.CreateCommand();
@@ -187,22 +200,24 @@ public static class Database
     /// Le prix moyen des commandes effectué par magasin
     /// </summary>
     /// <returns>
-    /// tuple (nom_magasin, moyenne_prix_commandes)
+    /// Une liste de tuple contenant le nom du magasin et le prix moyen des commandes de ce magasin
+    /// (magasin 1, moyenne prix 1), (magasin 2, moyenne prix 2), ...
     /// </returns>
-    public static (string,double) MeanPriceCommand()
+    public static List<(string,double)> MeanPriceCommand()
     {
         var command = _connexion.CreateCommand();
-        command.CommandText = "SELECT magasin.id_magasin, magasin.nom_magasin, AVG(produit.prix_produit*quantite.commande_produit) as " +
+        command.CommandText = "SELECT magasin.id_magasin, magasin.nom_magasin, AVG(produit.prix_produit*commande_produit.quantite) as " +
                               "moyenne_prix_commandes FROM magasin " +
                               "INNER JOIN commande ON magasin.id_magasin = commande.id_magasin " +
                               "INNER JOIN commande_produit ON commande.id_commande = commande_produit.id_commande " +
                               "INNER JOIN produit ON commande_produit.id_produit = produit.id_produit " +
                               "GROUP BY magasin.id_magasin";
         var reader = command.ExecuteReader();
-        (string, double) result = ("", 0.0);
+        List<(string, double)> result = new List<(string, double)>();
         while (reader.Read())
         {
-            result = (reader.GetString(1), reader.GetDouble(2));
+            result.Add((reader.GetString(1), reader.GetDouble(2)));
+            //Console.WriteLine(reader.GetString(1) + " " + reader.GetDouble(2));
         }
         reader.Close();
         return result;
@@ -232,39 +247,83 @@ public static class Database
     /// <summary>
     /// Meilleur client de l'annee et du mois
     /// </summary>
-    public static void BestClient()
+    /// <returns>
+    /// une liste contenant des tuples (nom, prenom, prix total)
+    /// le premier tuple est le meilleur client de l'annee
+    /// le deuxieme tuple est le meilleur client du mois
+    /// </returns>
+    /// <remarks>
+    /// Ne marche pas avec le peuplement actuel, aucune commande effectué en 2023
+    /// </remarks>
+    public static List<(string,string,double)> BestClient()
     {
         var command = _connexion.CreateCommand();
-        command.CommandText = "SELECT user.id_user, user.nom_utilisateur, user.prenom_utilisateur, SUM(produit.prix_produit) as prix_total " +
+        command.CommandText = "SELECT user._id, user.nom_utilisateur, user.prenom_utilisateur, SUM(produit.prix_produit) as prix_total " +
                               "FROM user " +
-                              "INNER JOIN commande ON user.id_user = commande.id_user " +
+                              "INNER JOIN commande ON user._id = commande.id_utilisateur " +
                               "INNER JOIN commande_produit ON commande.id_commande = commande_produit.id_commande " +
                               "INNER JOIN produit ON commande_produit.id_produit = produit.id_produit " +
                               "WHERE YEAR(commande.date_commande) = YEAR(CURDATE()) " +
-                              "GROUP BY user.id_user " +
+                              "GROUP BY user._id " +
                               "ORDER BY prix_total DESC " +
                               "LIMIT 1;";
         var reader = command.ExecuteReader();
+        List<(string, string, double)> result = new List<(string, string, double)>();
         while (reader.Read())
         {
-            Console.WriteLine($"Meilleur client de l'année: {reader.GetString(1)} {reader.GetString(2)} avec {reader.GetDouble(3)} euros");
+            result.Add((reader.GetString(1), reader.GetString(2), reader.GetDouble(3)));
+            //Console.WriteLine("meilleur client de l'année : " + reader.GetString(1) + " " + reader.GetString(2) + " avec un montant de " + reader.GetDouble(3));
         }
         reader.Close();
-        command.CommandText = "SELECT user.id_user, user.nom_utilisateur, user.prenom_utilisateur, SUM(produit.prix_produit) as prix_total " +
+        command.CommandText = "SELECT user._id, user.nom_utilisateur, user.prenom_utilisateur, SUM(produit.prix_produit) as prix_total " +
                               "FROM user " +
-                              "INNER JOIN commande ON user.id_user = commande.id_user " +
+                              "INNER JOIN commande ON user._id = commande.id_utilisateur " +
                               "INNER JOIN commande_produit ON commande.id_commande = commande_produit.id_commande " +
                               "INNER JOIN produit ON commande_produit.id_produit = produit.id_produit " +
                               "WHERE YEAR(commande.date_commande) = YEAR(CURDATE()) " +
-                              "GROUP BY user.id_user, MONTH(commande.date_commande) " +
+                              "GROUP BY user._id, MONTH(commande.date_commande) " +
                               "ORDER BY prix_total DESC " +
                               "LIMIT 1;";
         reader = command.ExecuteReader();
         while (reader.Read())
         {
-            Console.WriteLine($"Meilleur client du mois: {reader.GetString(1)} {reader.GetString(2)} avec {reader.GetDouble(3)} euros");
+            result.Add((reader.GetString(1), reader.GetString(2), reader.GetDouble(3)));
+            //Console.WriteLine("meilleur client du mois : " + reader.GetString(1) + " " + reader.GetString(2) + " avec un montant de " + reader.GetDouble(3));
         }
         reader.Close();
+        return result;
+    }
+    
+    /// <summary>
+    /// Compare le total de ventes entre les deux bouquets Maman et Vive la mariée
+    /// Utilise une union pour faire la requete en une seule fois
+    /// </summary>
+    /// <returns>
+    /// Une liste contenant des tuples (type_bouquet, total_ventes)
+    /// </returns>
+    public static List<(string, double)> ComparisonBetweenBouquet()
+    {
+        var command = _connexion.CreateCommand();
+        command.CommandText = "SELECT 'bouquet Maman' AS type_bouquet, SUM(produit.prix_produit) " +
+                              "AS total_ventes FROM commande " +
+                              "JOIN commande_produit ON commande.id_commande = commande_produit.id_commande " +
+                              "JOIN produit ON commande_produit.id_produit = produit.id_produit " +
+                              "WHERE produit.nom_produit = 'Maman' " +
+                              "UNION " +
+                              "SELECT 'Bouquet Vive la mariée' AS type_bouquet, SUM(produit.prix_produit) " +
+                              "AS total_ventes FROM commande " +
+                              "JOIN commande_produit ON commande.id_commande = commande_produit.id_commande " +
+                              "JOIN produit ON commande_produit.id_produit = produit.id_produit " +
+                              "WHERE produit.nom_produit = 'Vive la mariée'";
+        var reader = command.ExecuteReader();
+        List<(string, double)> result = new List<(string, double)>();
+        while (reader.Read())
+        {
+            result.Add((reader.GetString(0), reader.GetDouble(1)));
+            //Console.WriteLine(reader.GetString(0) + " " + reader.GetDouble(1));
+        }
+        reader.Close();
+        return result;
     }
 
     public static void DropTables()
