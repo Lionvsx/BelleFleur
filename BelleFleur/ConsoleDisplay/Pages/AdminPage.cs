@@ -1,3 +1,6 @@
+using BelleFleur.ConsoleDisplay.Pages.Admin;
+using BelleFleur.ConsoleDisplay.Pages.User;
+
 namespace BelleFleur.ConsoleDisplay.Pages;
 
 public class AdminPage : Menu
@@ -8,6 +11,7 @@ public class AdminPage : Menu
         _activeUser = new Database.Structures.User(username);
         Options = new List<Option>
         {
+            new("Statistiques des ventes et des magasins", () =>StatisticsPage(_activeUser)),
             new("Vérifier les stocks", CheckStocks),
             new("Toutes les commandes", CheckOrders),
             new("Tous les utilisateurs", CheckUsers),
@@ -51,6 +55,14 @@ public class AdminPage : Menu
     {
         var productsPage = new Admin.AllProducts(_activeUser);
         productsPage.Invoke();
+        Invoke();
+        
+    }
+    
+    public void StatisticsPage(Database.Structures.User user)
+    {
+        var statisticsPage = new StatisticsPage(user);
+        statisticsPage.Invoke();
         Invoke();
     }
 }
