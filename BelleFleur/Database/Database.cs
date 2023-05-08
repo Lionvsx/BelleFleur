@@ -88,6 +88,36 @@ public static class Database
         {
             result.Add(new Produit(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetFloat(3), reader.GetInt32(4)));
         }
+
+        reader.Close();
+        return result;
+    }
+
+    public static List<User> GetUsers()
+    {
+        var command = _connexion.CreateCommand();
+        command.CommandText = "SELECT * FROM user;";
+        var reader = command.ExecuteReader();
+        var result = new List<User>();
+        while (reader.Read())
+        {
+            result.Add(new User(reader.GetInt32(0), reader.GetString(1), reader.GetString(3), reader.GetString(4),
+                reader.GetString(5), reader.GetString(6), reader.GetString(7), reader.GetString(8), reader.GetString(9), reader.GetBoolean(10)));
+        }
+        reader.Close();
+        return result;
+    }
+
+    public static List<Commande> GetOrders()
+    {
+        var command = _connexion.CreateCommand();
+        command.CommandText = "SELECT * FROM commande;";
+        var reader = command.ExecuteReader();
+        var result = new List<Commande>();
+        while (reader.Read())
+        {
+            result.Add(new Commande(reader.GetInt32(0), reader.GetDateTime(1), reader.GetDateTime(2), reader.GetString(3), reader.GetString(4), reader.GetInt16(5), reader.GetInt16(6)));
+        }
         reader.Close();
         return result;
     }
@@ -116,6 +146,45 @@ public static class Database
                               "DELETE FROM stocks;";
 
     }
+    
+    /// <summary>
+    /// Le prix moyen des commandes effectué par magasin
+    /// </summary>
+    public static void MeanPriceCommand()
+    {
+        var command = _connexion.CreateCommand();
+        command.CommandText = "SELECT magasin.id_magasin, magasin.nom_magasin, AVG(produit.prix_produit) as " +
+                              "moyenne_prix_commandes FROM magasin " +
+                              "INNER JOIN commande ON magasin.id_magasin = commande.id_magasin " +
+                              "INNER JOIN commande_produit ON commande.id_commande = commande_produit.id_commande " +
+                              "INNER JOIN produit ON commande_produit.id_produit = produit.id_produit " +
+                              "GROUP BY magasin.id_magasin";
+        var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            Console.WriteLine($"Magasin: {reader.GetString(1)} - Moyenne prix commandes: {reader.GetDouble(2)}");
+        }
+        reader.Close();
+    }
+
+    /// <summary>
+    /// moyenne de toutes les commandes effectué quelque soit le magasin
+    /// </summary>
+    public static void MeanPriceAllCommand()
+    { 
+        var command = _connexion.CreateCommand();
+        command.CommandText = "SELECT AVG(produit.prix_produit) as moyenne_prix_commandes FROM commande_produit " +
+                              "INNER JOIN produit ON commande_produit.id_produit = produit.id_produit " +
+                              "GROUP BY commande_produit.id_commande";
+        var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            Console.WriteLine($"Moyenne prix commandes: {reader.GetDouble(0)}");
+        }
+    }
+    
+
+
 
     public static void DropTables()
     {
