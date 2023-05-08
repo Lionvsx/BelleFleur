@@ -5,7 +5,7 @@ public class AdminPage : Menu
     public AdminPage(string username)
     {
         var user = new Database.Structures.User(username);
-        Options = new List<Option>()
+        Options = new List<Option>
         {
             new("Vérifier les stocks", CheckStocks),
             new("Toutes les commandes", CheckOrders),

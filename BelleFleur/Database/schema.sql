@@ -60,4 +60,4 @@ CREATE TABLE IF NOT EXISTS commande_produit (
     PRIMARY KEY (id_commande_produit),
     FOREIGN KEY (id_commande) REFERENCES commande(id_commande),
     FOREIGN KEY (id_produit) REFERENCES produit(id_produit)
-    ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+    ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;

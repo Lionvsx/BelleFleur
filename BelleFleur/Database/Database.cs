@@ -102,4 +102,22 @@ public static class Database
         reader.Close();
         return result;
     }
+
+    public static void ClearTables()
+    {
+        var command = _connexion.CreateCommand();
+        command.CommandText = "DELETE FROM produit;" +
+                              "DELETE FROM magasin;" +
+                              "DELETE FROM user;" +
+                              "DELETE FROM commande;" +
+                              "DELETE FROM commande_produit;" +
+                              "DELETE FROM user;" +
+                              "DELETE FROM stocks;";
+
+    }
+
+    public static void DropTables()
+    {
+        
+    }
 }

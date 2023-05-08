@@ -6,6 +6,6 @@ using BelleFleur.Database;
 Console.WriteLine("Hello, World!");
 
 Database.Connect("root", "root");
-Database.Populate();
+
 var menu = new Login();
 menu.Invoke();

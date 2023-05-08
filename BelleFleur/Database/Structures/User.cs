@@ -43,7 +43,6 @@ public class User
         statut_fidelite = reader.GetString(9);
         is_admin = reader.GetBoolean(10);
         reader.Close();
-        
         this.username = username;
     }
 
