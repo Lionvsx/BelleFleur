@@ -27,7 +27,7 @@ public class Menu
             do
             {
                 key = Console.ReadKey(true);
-                
+
                 if (key.Key == ConsoleKey.DownArrow)
                 {
                     if (_index < _options.Count - 1)
