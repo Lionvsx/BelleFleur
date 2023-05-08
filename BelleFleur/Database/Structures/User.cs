@@ -100,9 +100,11 @@ public class User
         set => is_admin = value;
     }
 
-    public void UpdatePassword()
+    public void UpdatePassword(string password)
     {
-        
+        var command = Database.Connexion.CreateCommand();
+        command.CommandText = $"UPDATE user SET password = '{password}' WHERE id = {_id};";
+        command.ExecuteNonQuery();
     }
 
     public void Save()

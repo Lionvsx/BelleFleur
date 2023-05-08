@@ -4,52 +4,53 @@ namespace BelleFleur.ConsoleDisplay.Pages;
 
 public class UserPage : Menu
 {
+    private Database.Structures.User _activeUser;
     public UserPage(string username)
     {
-        var user = new Database.Structures.User(username);
+        _activeUser = new Database.Structures.User(username);
         Options = new List<Option>()
         {
-            new("Magasin", () => Shop(user)),
+            new("Magasin", () => Shop(_activeUser)),
             new("Modifier le profil", EditProfile),
-            new("Commandes", Orders),
-            new("Déconnexion", Logout),
+            new("Commandes", () => Orders(_activeUser)),
             new("Changer le mot de passe", ChangePassword),
-            new("Quitter", ExitMenu)
+            new("Me déconnecter", ExitMenu)
         };
 
 
-        Description = "Bienvenue " + user.Username + " !";
+        Description = "Bienvenue " + _activeUser.Username + " !";
     }
 
     public void Shop(Database.Structures.User user)
     {
         var shoppingPage = new ShoppingPage(user);
         shoppingPage.Invoke();
+        Invoke();
 
     }
 
     public void EditProfile()
     {
-        
+        Console.WriteLine("Non implémenté");
+        Console.ReadLine();
+        Invoke();
     }
 
-    public void Orders()
+    public void Orders(Database.Structures.User user)
     {
-        
-    }
-    
-    public void Logout()
-    {
-        
+        var ordersPage = new OrdersPage(user);
+        ordersPage.Invoke();
+        Invoke();
     }
 
     public void ChangePassword()
     {
-        
-    }
-    
-    public void CheckStocks()
-    {
-        
+        ConsoleFunctions.ClearConsole();
+        Console.WriteLine("Veuillez entrer votre nouveau mot de passe :");
+        string newPassword = Console.ReadLine() ?? throw new InvalidOperationException();
+        _activeUser.UpdatePassword(newPassword);
+        Console.WriteLine("Votre mot de passe a bien été changé !");
+        Console.ReadLine();
+        Invoke();
     }
 }

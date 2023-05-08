@@ -58,13 +58,13 @@ public static class Database
         return result;
     }
 
-    public static bool CreateAccount(string? user, string password)
+    public static bool CreateAccount(string? user, string password, string nom, string prenom, string telephone, string email, string addresse, string creditCard)
     {
         var command = _connexion.CreateCommand();
         // Validate user inputs
         user = MySqlHelper.EscapeString(user);
         password = MySqlHelper.EscapeString(password);
-        command.CommandText = $"INSERT INTO user (username, password) VALUES ('{user}', '{password}');";
+        command.CommandText = $"INSERT INTO user (username, password, nom_utilisateur, prenom_utilisateur, telephone, email, addresse, credit_card, statut_fidelite, is_admin) VALUES ('{user}', '{password}', '{nom}', '{prenom}', '{telephone}', '{email}', '{addresse}', '{creditCard}', 'bronze', 0);";
         var result = command.ExecuteNonQuery();
         return result > 0;
     }
