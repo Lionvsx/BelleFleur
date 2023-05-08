@@ -55,7 +55,7 @@ public class Login : Menu
         AuthUser();
     }
 
-    public void AuthUser(bool admin = false)
+    public void AuthUser()
     {
         ConsoleFunctions.ClearConsole();
         Console.Write("Utilisateur: ");
@@ -66,14 +66,16 @@ public class Login : Menu
         Console.WriteLine("Connexion en cours...");
         // Check if null
         if (user == null || password == null) return;
-        var result= Database.Database.Authentificate(user, password, admin);
+        var adminMode = Database.Database.Authentificate(user, password, true);
+        var result= adminMode ? true : Database.Database.Authentificate(user, password);
+        
         if (result == false)
         {
             Console.WriteLine("Utilisateur ou mot de passe incorrect, veuillez réessayer.");
             Console.ReadKey();
             Invoke();
         }
-        if (admin)
+        if (adminMode)
         {
             AdminPage adminPage = new AdminPage(user);
             adminPage.Invoke();
