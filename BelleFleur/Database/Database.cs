@@ -1,3 +1,4 @@
+using System.Data;
 using System.Text.Json;
 using BelleFleur.Database.Structures;
 using MySql.Data.MySqlClient;
@@ -157,6 +158,41 @@ public static class Database
         while (reader.Read())
         {
             result.Add(new Commande(reader.GetInt32(0), reader.GetDateTime(1), reader.GetDateTime(2), reader.GetString(3), reader.GetString(4), reader.GetInt16(5), reader.GetInt16(6)));
+        }
+        reader.Close();
+        return result;
+    }
+
+    public static List<Commande> GetUserOrders(User user)
+    {
+        var commmand = _connexion.CreateCommand();
+        commmand.CommandText = $"SELECT * FROM commande WHERE id_utilisateur = {user._id};";
+        var reader = commmand.ExecuteReader();
+        var result = new List<Commande>();
+        while (reader.Read())
+        {
+            if (reader.IsDBNull(3))
+            {
+                result.Add(new Commande(reader.GetInt32(0), reader.GetDateTime(1), reader.GetDateTime(2), reader.GetString(4), reader.GetInt16(5), reader.GetInt16(6)));
+            }
+            else
+            {
+                result.Add(new Commande(reader.GetInt32(0), reader.GetDateTime(1), reader.GetDateTime(2), reader.GetString(3), reader.GetString(4), reader.GetInt16(5), reader.GetInt16(6)));
+            }
+        }
+        reader.Close();
+        return result;
+    }
+
+    public static List<CommandeProduit> GetOrderProducts(Commande order)
+    {
+        var command = _connexion.CreateCommand();
+        command.CommandText = $"SELECT * FROM commande_produit WHERE id_commande = {order.Id};";
+        var reader = command.ExecuteReader();
+        var result = new List<CommandeProduit>();
+        while (reader.Read())
+        {
+            result.Add(new CommandeProduit(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2)));
         }
         reader.Close();
         return result;
@@ -377,6 +413,38 @@ public static class Database
         {
             result.Add((reader.GetString(1), reader.GetString(2), reader.GetDouble(3)));
             //Console.WriteLine("meilleur client du mois : " + reader.GetString(1) + " " + reader.GetString(2) + " avec un montant de " + reader.GetDouble(3));
+        }
+        reader.Close();
+        return result;
+    }
+    
+    /// <summary>
+    /// Compare le total de ventes entre les deux bouquets Maman et Vive la mariée
+    /// Utilise une union pour faire la requete en une seule fois
+    /// </summary>
+    /// <returns>
+    /// Une liste contenant des tuples (type_bouquet, total_ventes)
+    /// </returns>
+    public static List<(string, double)> ComparisonBetweenBouquet()
+    {
+        var command = _connexion.CreateCommand();
+        command.CommandText = "SELECT 'bouquet Maman' AS type_bouquet, SUM(produit.prix_produit) " +
+                              "AS total_ventes FROM commande " +
+                              "JOIN commande_produit ON commande.id_commande = commande_produit.id_commande " +
+                              "JOIN produit ON commande_produit.id_produit = produit.id_produit " +
+                              "WHERE produit.nom_produit = 'Maman' " +
+                              "UNION " +
+                              "SELECT 'Bouquet Vive la mariée' AS type_bouquet, SUM(produit.prix_produit) " +
+                              "AS total_ventes FROM commande " +
+                              "JOIN commande_produit ON commande.id_commande = commande_produit.id_commande " +
+                              "JOIN produit ON commande_produit.id_produit = produit.id_produit " +
+                              "WHERE produit.nom_produit = 'Vive la mariée'";
+        var reader = command.ExecuteReader();
+        List<(string, double)> result = new List<(string, double)>();
+        while (reader.Read())
+        {
+            result.Add((reader.GetString(0), reader.GetDouble(1)));
+            //Console.WriteLine(reader.GetString(0) + " " + reader.GetDouble(1));
         }
         reader.Close();
         return result;
