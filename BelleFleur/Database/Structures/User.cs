@@ -26,7 +26,81 @@ public class User
         this.statut_fidelite = statut_fidelite;
         this.is_admin = is_admin;
     }
-    
+
+    public User(string username)
+    {
+        var command = Database.Connexion.CreateCommand();
+        command.CommandText = $"SELECT * FROM user WHERE username = '{username}';";
+        var reader = command.ExecuteReader();
+        reader.Read();
+        _id = reader.GetInt32(0);
+        nom = reader.GetString(3);
+        prenom = reader.GetString(4);
+        telephone = reader.GetString(5);
+        email = reader.GetString(6);
+        addresse = reader.GetString(7);
+        credit_card = reader.GetString(8);
+        statut_fidelite = reader.GetString(9);
+        is_admin = reader.GetBoolean(10);
+        reader.Close();
+        
+        this.username = username;
+    }
+
+    public string Username
+    {
+        get => username;
+        set => username = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
+    public string Nom
+    {
+        get => nom;
+        set => nom = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
+    public string Prenom
+    {
+        get => prenom;
+        set => prenom = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
+    public string Telephone
+    {
+        get => telephone;
+        set => telephone = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
+    public string Email
+    {
+        get => email;
+        set => email = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
+    public string Addresse
+    {
+        get => addresse;
+        set => addresse = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
+    public string CreditCard
+    {
+        get => credit_card;
+        set => credit_card = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
+    public string StatutFidelite
+    {
+        get => statut_fidelite;
+        set => statut_fidelite = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
+    public bool IsAdmin
+    {
+        get => is_admin;
+        set => is_admin = value;
+    }
+
     public void UpdatePassword()
     {
         
