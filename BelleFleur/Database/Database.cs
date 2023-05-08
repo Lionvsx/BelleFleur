@@ -150,30 +150,38 @@ public static class Database
     /// <summary>
     /// Le prix moyen des commandes effectué par magasin
     /// </summary>
-    public static void MeanPriceCommand()
+    /// <returns>
+    /// tuple (nom_magasin, moyenne_prix_commandes)
+    /// </returns>
+    public static (string,double) MeanPriceCommand()
     {
         var command = _connexion.CreateCommand();
-        command.CommandText = "SELECT magasin.id_magasin, magasin.nom_magasin, AVG(produit.prix_produit) as " +
+        command.CommandText = "SELECT magasin.id_magasin, magasin.nom_magasin, AVG(produit.prix_produit*quantite.commande_produit) as " +
                               "moyenne_prix_commandes FROM magasin " +
                               "INNER JOIN commande ON magasin.id_magasin = commande.id_magasin " +
                               "INNER JOIN commande_produit ON commande.id_commande = commande_produit.id_commande " +
                               "INNER JOIN produit ON commande_produit.id_produit = produit.id_produit " +
                               "GROUP BY magasin.id_magasin";
         var reader = command.ExecuteReader();
+        (string, double) result = ("", 0.0);
         while (reader.Read())
         {
-            Console.WriteLine($"Magasin: {reader.GetString(1)} - Moyenne prix commandes: {reader.GetDouble(2)}");
+            result = (reader.GetString(1), reader.GetDouble(2));
         }
         reader.Close();
+        return result;
     }
 
     /// <summary>
     /// moyenne de toutes les commandes effectué quelque soit le magasin
     /// </summary>
+    /// <returns>
+    /// moyenne_prix_commandes
+    /// </returns>
     public static double MeanPriceAllCommand()
     { 
         var command = _connexion.CreateCommand();
-        command.CommandText = "SELECT AVG(produit.prix_produit) as moyenne_prix_commandes FROM commande_produit " +
+        command.CommandText = "SELECT AVG(produit.prix_produit*quantite) as moyenne_prix_commandes FROM commande_produit " +
                               "INNER JOIN produit ON commande_produit.id_produit = produit.id_produit ";
         var reader = command.ExecuteReader();
         var result = 0.0;
