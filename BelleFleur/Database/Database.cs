@@ -182,9 +182,44 @@ public static class Database
             Console.WriteLine($"Moyenne prix commandes: {reader.GetDouble(0)}");
         }
     }
-    
 
-
+    /// <summary>
+    /// Meilleur client de l'annee et du mois
+    /// </summary>
+    public static void BestClient()
+    {
+        var command = _connexion.CreateCommand();
+        command.CommandText = "SELECT user.id_user, user.nom_utilisateur, user.prenom_utilisateur, SUM(produit.prix_produit) as prix_total " +
+                              "FROM user " +
+                              "INNER JOIN commande ON user.id_user = commande.id_user " +
+                              "INNER JOIN commande_produit ON commande.id_commande = commande_produit.id_commande " +
+                              "INNER JOIN produit ON commande_produit.id_produit = produit.id_produit " +
+                              "WHERE YEAR(commande.date_commande) = YEAR(CURDATE()) " +
+                              "GROUP BY user.id_user " +
+                              "ORDER BY prix_total DESC " +
+                              "LIMIT 1;";
+        var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            Console.WriteLine($"Meilleur client de l'année: {reader.GetString(1)} {reader.GetString(2)} avec {reader.GetDouble(3)} euros");
+        }
+        reader.Close();
+        command.CommandText = "SELECT user.id_user, user.nom_utilisateur, user.prenom_utilisateur, SUM(produit.prix_produit) as prix_total " +
+                              "FROM user " +
+                              "INNER JOIN commande ON user.id_user = commande.id_user " +
+                              "INNER JOIN commande_produit ON commande.id_commande = commande_produit.id_commande " +
+                              "INNER JOIN produit ON commande_produit.id_produit = produit.id_produit " +
+                              "WHERE YEAR(commande.date_commande) = YEAR(CURDATE()) " +
+                              "GROUP BY user.id_user, MONTH(commande.date_commande) " +
+                              "ORDER BY prix_total DESC " +
+                              "LIMIT 1;";
+        reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            Console.WriteLine($"Meilleur client du mois: {reader.GetString(1)} {reader.GetString(2)} avec {reader.GetDouble(3)} euros");
+        }
+        reader.Close();
+    }
 
     public static void DropTables()
     {

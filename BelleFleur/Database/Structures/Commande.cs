@@ -9,7 +9,17 @@ public class Commande
     private string etat_commande;
     private int id_utilisateur;
     private int id_magasin;
-    
+
+    public Commande(DateTime dateLivraison, string messageCommande, string etatCommande,int idUtilisateur, int idMagasin)
+    {
+        this.date_commande = DateTime.Now;
+        this.date_livraison = dateLivraison;
+        this.message_commande = messageCommande;
+        this.etat_commande = etatCommande;
+        this.id_utilisateur = idUtilisateur;
+        this.id_magasin = idMagasin;
+        
+    }
     public Commande(int id_commande, DateTime date_commande, DateTime date_livraison, string message_commande, string etat_commande, int id_utilisateur, int id_magasin)
     {
         this.id_commande = id_commande;
@@ -46,6 +56,8 @@ public class Commande
             this.etat_commande = etat_commande;
         }
     }
+
+    
 
     public void CheckStock()
     {
