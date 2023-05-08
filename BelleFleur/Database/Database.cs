@@ -87,10 +87,37 @@ public static class Database
         while (reader.Read())
         {
             result.Add(new Produit(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetFloat(3), reader.GetInt32(4)));
-            result.Add(new Produit(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3),
-                reader.GetInt32(4), reader.GetDateTime(5), reader.GetDateTime(6)));
         }
 
+        reader.Close();
+        return result;
+    }
+
+    public static List<User> GetUsers()
+    {
+        var command = _connexion.CreateCommand();
+        command.CommandText = "SELECT * FROM user;";
+        var reader = command.ExecuteReader();
+        var result = new List<User>();
+        while (reader.Read())
+        {
+            result.Add(new User(reader.GetInt32(0), reader.GetString(1), reader.GetString(3), reader.GetString(4),
+                reader.GetString(5), reader.GetString(6), reader.GetString(7), reader.GetString(8), reader.GetString(9), reader.GetBoolean(10)));
+        }
+        reader.Close();
+        return result;
+    }
+
+    public static List<Commande> GetOrders()
+    {
+        var command = _connexion.CreateCommand();
+        command.CommandText = "SELECT * FROM commande;";
+        var reader = command.ExecuteReader();
+        var result = new List<Commande>();
+        while (reader.Read())
+        {
+            result.Add(new Commande(reader.GetInt32(0), reader.GetDateTime(1), reader.GetDateTime(2), reader.GetString(3), reader.GetString(4), reader.GetInt16(5), reader.GetInt16(6)));
+        }
         reader.Close();
         return result;
     }
