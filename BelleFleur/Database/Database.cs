@@ -170,17 +170,19 @@ public static class Database
     /// <summary>
     /// moyenne de toutes les commandes effectué quelque soit le magasin
     /// </summary>
-    public static void MeanPriceAllCommand()
+    public static double MeanPriceAllCommand()
     { 
         var command = _connexion.CreateCommand();
         command.CommandText = "SELECT AVG(produit.prix_produit) as moyenne_prix_commandes FROM commande_produit " +
-                              "INNER JOIN produit ON commande_produit.id_produit = produit.id_produit " +
-                              "GROUP BY commande_produit.id_commande";
+                              "INNER JOIN produit ON commande_produit.id_produit = produit.id_produit ";
         var reader = command.ExecuteReader();
+        var result = 0.0;
         while (reader.Read())
         {
-            Console.WriteLine($"Moyenne prix commandes: {reader.GetDouble(0)}");
+            result = reader.GetDouble(0);
         }
+        reader.Close();
+        return result;
     }
 
     /// <summary>
