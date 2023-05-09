@@ -44,6 +44,7 @@ public class AdminPage : Menu
     {
         var allOrdersPage = new AllOrders(_activeUser);
         allOrdersPage.Invoke();
+        Invoke();
     }
     
     public void CheckUsers()

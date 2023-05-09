@@ -57,7 +57,6 @@ public class ShoppingPage : Menu
         }
         
         Console.WriteLine("Votre commande a bien été envoyée !");
-        Console.ReadKey();
         ExitMenu();
     }
 

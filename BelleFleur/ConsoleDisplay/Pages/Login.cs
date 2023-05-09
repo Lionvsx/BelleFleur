@@ -88,9 +88,13 @@ public class Login : Menu
         {
             AdminPage adminPage = new AdminPage(user);
             adminPage.Invoke();
+            Invoke();
         }
-        UserPage userPage = new UserPage(user);
-        userPage.Invoke();
-        Invoke();
+        else
+        {
+            UserPage userPage = new UserPage(user);
+            userPage.Invoke();
+            Invoke();
+        }
     }
 }
