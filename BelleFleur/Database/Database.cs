@@ -73,7 +73,7 @@ public static class Database
         // Validate user inputs
         user = MySqlHelper.EscapeString(user);
         password = MySqlHelper.EscapeString(password);
-        command.CommandText = $"INSERT INTO user (username, password, nom_utilisateur, prenom_utilisateur, telephone, email, addresse, credit_card, statut_fidelite, is_admin) VALUES ('{user}', '{password}', '{nom}', '{prenom}', '{telephone}', '{email}', '{addresse}', '{creditCard}', 'bronze', 0);";
+        command.CommandText = $"INSERT INTO user (username, password, nom_utilisateur, prenom_utilisateur, telephone_utilisateur, email_utilisateur, adresse_utilisateur, carte_credit_utilisateur, statut_fidelite, is_admin) VALUES ('{user}', '{password}', '{nom}', '{prenom}', '{telephone}', '{email}', '{addresse}', '{creditCard}', 'bronze', 0);";
         var result = command.ExecuteNonQuery();
         return result > 0;
     }

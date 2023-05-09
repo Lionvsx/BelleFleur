@@ -48,6 +48,15 @@ public class Login : Menu
         
         Console.WriteLine("Création du compte en cours...");
         var result = Database.Database.CreateAccount(user, password, firstName, lastName, address, phone, creditCard, email);
+        if (result == false)
+        {
+            Console.WriteLine("Une erreur est survenue lors de la création du compte, veuillez réessayer.");
+            Console.ReadKey();
+            Invoke();
+        }
+        Console.WriteLine("Compte créé avec succès !");
+        Console.ReadKey();
+        Invoke();
     }
 
     private void UserAccess()
