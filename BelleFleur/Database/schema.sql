@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS commande (
     id_utilisateur int(11) NOT NULL,
     id_magasin int(11) NOT NULL,
     PRIMARY KEY (id_commande),
-    FOREIGN KEY (id_utilisateur) REFERENCES user(_id)
+    FOREIGN KEY (id_utilisateur) REFERENCES user(_id) ON DELETE CASCADE
     ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS produit (
@@ -49,8 +49,8 @@ CREATE TABLE IF NOT EXISTS stocks (
     id_produit int(11) NOT NULL,
     id_magasin int(11) NOT NULL,
     PRIMARY KEY (id_stocks),
-    FOREIGN KEY (id_produit) REFERENCES produit(id_produit),
-    FOREIGN KEY (id_magasin) REFERENCES magasin(id_magasin)
+    FOREIGN KEY (id_produit) REFERENCES produit(id_produit) ON DELETE CASCADE,
+    FOREIGN KEY (id_magasin) REFERENCES magasin(id_magasin) ON DELETE CASCADE
     ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS commande_produit (
@@ -59,6 +59,6 @@ CREATE TABLE IF NOT EXISTS commande_produit (
     id_produit int(11) NOT NULL,
     quantite int(11) NOT NULL,
     PRIMARY KEY (id_commande_produit),
-    FOREIGN KEY (id_commande) REFERENCES commande(id_commande),
-    FOREIGN KEY (id_produit) REFERENCES produit(id_produit)
+    FOREIGN KEY (id_commande) REFERENCES commande(id_commande) ON DELETE CASCADE,
+    FOREIGN KEY (id_produit) REFERENCES produit(id_produit) ON DELETE CASCADE
     ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
