@@ -105,7 +105,7 @@ public class User
     public void UpdatePassword(string password)
     {
         var command = Database.Connexion.CreateCommand();
-        command.CommandText = $"UPDATE user SET password = '{password}' WHERE id = {_id};";
+        command.CommandText = $"UPDATE user SET password = '{password}' WHERE _id = {_id};";
         command.ExecuteNonQuery();
     }
 
