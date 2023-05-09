@@ -70,7 +70,7 @@ public class Produit
     public void Delete()
     {
         var command = Database.Connexion.CreateCommand();
-        command.CommandText = $"DELETE FROM produit WHERE id = {_id};";
+        command.CommandText = $"DELETE FROM produit WHERE id_produit = {_id};";
         command.ExecuteNonQuery();
     }
     

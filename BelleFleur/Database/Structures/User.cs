@@ -26,6 +26,8 @@ public class User
         this.statut_fidelite = statut_fidelite;
         this.is_admin = is_admin;
     }
+    
+    
 
     public User(string username)
     {
@@ -117,7 +119,7 @@ public class User
     public void Delete()
     {
         var command = Database.Connexion.CreateCommand();
-        command.CommandText = $"DELETE FROM user WHERE id = {_id};";
+        command.CommandText = $"DELETE FROM user WHERE _id = {_id};";
         command.ExecuteNonQuery();
     }
     
